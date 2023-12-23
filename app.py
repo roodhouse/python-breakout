@@ -19,3 +19,19 @@
     # enter iniitals to save high score
     # high scores 
     # play again
+
+from turtle import Turtle, Screen
+
+screen = Screen()
+
+screen.setup(width=1200, height=900)
+screen.bgcolor('black')
+screen.title('Breakout')
+screen.tracer(0)
+screen.listen()
+
+
+
+
+
+screen.exitonclick()
