@@ -21,6 +21,7 @@
     # play again
 
 from turtle import Turtle, Screen
+from introScreen.intro_screen import Intro_Screen
 
 screen = Screen()
 
@@ -31,6 +32,7 @@ screen.tracer(0)
 screen.listen()
 
 
+intro = Intro_Screen()
 
 
 
