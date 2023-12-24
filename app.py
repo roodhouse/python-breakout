@@ -20,7 +20,7 @@
     # high scores 
     # play again
 
-from turtle import Turtle, Screen
+from turtle import Screen
 from introScreen.intro_screen import Intro_Screen
 
 screen = Screen()
