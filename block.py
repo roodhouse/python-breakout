@@ -4,6 +4,7 @@ class Block(Turtle):
     def __init__(self):
         super().__init__()
         self.shape('square')
+        self.hideturtle()
         
     def draw_rectangle(self, R, G, B):
         self.color(R, G, B)

@@ -8,6 +8,7 @@
 from turtle import Screen
 from menu import MenuItem
 from block import Block
+from paddle import Paddle
 
 screen = Screen()
 
@@ -106,4 +107,14 @@ for i in range(13):
     neg_R = neg_R - 10
     row_neg.append(block)
 
-screen.exitonclick()
+paddle = Paddle()
+
+screen.onkey(paddle.move_right, 'Right')
+screen.onkey(paddle.move_left, 'Left')
+
+game_on = True
+
+while game_on:
+    screen.update()
+
+screen.mainloop()
