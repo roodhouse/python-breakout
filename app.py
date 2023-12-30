@@ -3,16 +3,20 @@
     # pause button
     # game board
         # ball
-        # bar
+    # paddle looks long but it really is not long
+    # control speed of ball
+
 
 from turtle import Screen
 from menu import MenuItem
 from block import Block
 from paddle import Paddle
+from ball import Ball
 
 screen = Screen()
 
-screen.setup(width=1200, height=900)
+# screen.setup(width=1200, height=900)
+screen.setup(width=1250, height=950)
 screen.bgcolor('black')
 screen.colormode(255)
 screen.title('Breakout')
@@ -34,6 +38,21 @@ right_menu.write(SCORE, font=('VT323', 35, 'normal'))
 center_menu = MenuItem()
 center_menu.goto(-50,400)
 center_menu.write(TITLE, font=('VT323', 35, 'normal'))
+
+border = MenuItem()
+border.goto(-600, 390)
+border.color('#FF1493')
+border.pendown()
+border.pensize(2)
+border.forward(1190)
+border.right(90)
+border.forward(830)
+border.right(90)
+border.forward(1190)
+border.right(90)
+border.forward(830)
+# border.shapesize(.1, 100)
+# border.showturtle()
 
 back_row = []
 row_four = []
@@ -108,6 +127,9 @@ for i in range(13):
     row_neg.append(block)
 
 paddle = Paddle()
+ball = Ball()
+
+
 
 screen.onkey(paddle.move_right, 'Right')
 screen.onkey(paddle.move_left, 'Left')
@@ -115,6 +137,11 @@ screen.onkey(paddle.move_left, 'Left')
 game_on = True
 
 while game_on:
+    ball.drop()
+
+    if ball.distance(paddle) < 50 or ball.ycor() > 400:
+        ball.bounce_y()
+
     screen.update()
 
 screen.mainloop()
