@@ -2,9 +2,9 @@
 
     # pause button
     # game board
-        # ball
-    # paddle looks long but it really is not long
-    # control speed of ball
+        # cause block to break and deflect ball
+        # cause 3 walls to deflect ball
+        # increase speed of ball at the 1st instance of a new row being hit
 
 
 from turtle import Screen
@@ -12,10 +12,10 @@ from menu import MenuItem
 from block import Block
 from paddle import Paddle
 from ball import Ball
+import time
 
 screen = Screen()
 
-# screen.setup(width=1200, height=900)
 screen.setup(width=1250, height=950)
 screen.bgcolor('black')
 screen.colormode(255)
@@ -129,19 +129,20 @@ for i in range(13):
 paddle = Paddle()
 ball = Ball()
 
-
-
 screen.onkey(paddle.move_right, 'Right')
 screen.onkey(paddle.move_left, 'Left')
 
 game_on = True
 
 while game_on:
+    time.sleep(ball.move_speed)
+    screen.update()
     ball.drop()
 
-    if ball.distance(paddle) < 50 or ball.ycor() > 400:
+    # if ball.distance(paddle) < 20 or ball.ycor() > 400:
+    if ball.ycor() == -330 and ball.distance(paddle) < 150 or ball.ycor() > 375:
         ball.bounce_y()
 
-    screen.update()
+    
 
 screen.mainloop()
