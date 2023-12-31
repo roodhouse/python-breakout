@@ -2,9 +2,11 @@
 
 # pause button
 # game board
-# cause block to break and deflect ball
 # increase speed of ball at the 1st instance of a new row being hit
-
+# add scoring
+# add lose of life when ball missed by paddle
+# add extra life upon clearing board
+# add board reset upon clearing of the board
 
 from turtle import Screen
 from menu import MenuItem
@@ -152,8 +154,16 @@ screen.onkey(paddle.move_left, "Left")
 
 game_on = True
 
-print(row_neg[6].ycor())
-print(row_neg[6].xcor())
+all_rows = []
+all_rows.append(row_neg)
+all_rows.append(row_zero)
+all_rows.append(row_one)
+all_rows.append(row_two)
+all_rows.append(row_three)
+all_rows.append(row_four)
+all_rows.append(back_row)
+
+print(all_rows)
 
 while game_on:
     time.sleep(ball.move_speed)
@@ -169,18 +179,19 @@ while game_on:
         ball.wall_hit()
 
     # block hit
-    for index, block in enumerate(row_neg):
-        if (
-            ball.ycor() >= block.ycor() - 40
-            and ball.ycor() <= block.ycor()
-            and ball.xcor() >= block.xcor()
-            and ball.xcor() <= block.xcor() + 80
-        ):
-            print(len(row_neg))
-            ball.bounce_y()
-            block.clear()
-            row_neg.pop(index)
-            print(len(row_neg))
+    for row in all_rows:
+        for index, block in enumerate(row):
+            if (
+                ball.ycor() >= block.ycor() - 40
+                and ball.ycor() <= block.ycor()
+                and ball.xcor() >= block.xcor()
+                and ball.xcor() <= block.xcor() + 80
+            ):
+                print(len(row))
+                ball.bounce_y()
+                block.clear()
+                row.pop(index)
+                print(len(row))
             
 
 
