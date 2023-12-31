@@ -15,9 +15,10 @@ class Ball(Turtle):
 
     def drop(self):
         new_y = self.ycor() - self.y_move
-        # new_x = self.xcor() - self.x_move
-        # self.goto(new_x, new_y)
-        self.goto(self.xcor(), new_y)
+        new_x = self.xcor() - self.x_move
+        self.goto(new_x, new_y)
+        # delete one below 
+        # self.goto(self.xcor(), new_y)
 
     def bounce_y(self):
         self.y_move *= -1

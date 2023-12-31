@@ -143,19 +143,28 @@ while game_on:
     screen.update()
     ball.drop()
 
+    # paddle hit
     if ball.ycor() == -330 and ball.distance(paddle) < 150 or ball.ycor() > 375:
         ball.bounce_y()
 
+    # wall hit
     if ball.xcor() == -590 or ball.xcor() == 580:
         ball.wall_hit()
 
-    if (
-        ball.ycor() >= row_neg[6].ycor() - 40
-        and ball.ycor() <= row_neg[6].ycor()
-        and ball.xcor() >= row_neg[6].xcor()
-        and ball.xcor() <= row_neg[6].xcor() + 80
-    ):
-        print("whoop there it is")
+    # block hit
+    for index, block in enumerate(row_neg):
+        if (
+            ball.ycor() >= block.ycor() - 40
+            and ball.ycor() <= block.ycor()
+            and ball.xcor() >= block.xcor()
+            and ball.xcor() <= block.xcor() + 80
+        ):
+            print(len(row_neg))
+            ball.bounce_y()
+            block.clear()
+            row_neg.pop(index)
+            print(len(row_neg))
+            
 
 
 screen.mainloop()
