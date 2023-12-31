@@ -2,7 +2,6 @@
 
 # pause button
 # game board
-# increase speed of ball at the 1st instance of a new row being hit
 # add scoring
 # add lose of life when ball missed by paddle
 # add extra life upon clearing board
@@ -163,8 +162,6 @@ all_rows.append(row_three)
 all_rows.append(row_four)
 all_rows.append(back_row)
 
-print(all_rows)
-
 while game_on:
     time.sleep(ball.move_speed)
     screen.update()
@@ -178,6 +175,13 @@ while game_on:
     if ball.xcor() == -590 or ball.xcor() == 580:
         ball.wall_hit()
 
+    # ball miss
+    if ball.ycor() == -450:
+        print('the whiff')
+        paddle.reset()
+        ball.reset()
+
+
     # block hit
     for row in all_rows:
         for index, block in enumerate(row):
@@ -187,12 +191,44 @@ while game_on:
                 and ball.xcor() >= block.xcor()
                 and ball.xcor() <= block.xcor() + 80
             ):
-                print(len(row))
                 ball.bounce_y()
                 block.clear()
                 row.pop(index)
-                print(len(row))
-            
+                print(ball.move_speed)
+                if row == all_rows[0]:
+                    ball.move_speed = ball.move_speed
+                elif row == all_rows[1]:
+                    if ball.move_speed <= 0.06:
+                        ball.move_speed = ball.move_speed
+                    else:
+                        ball.move_speed = 0.06
+                elif row == all_rows[2]:
+                    if ball.move_speed <= 0.05:
+                        ball.move_speed = ball.move_speed
+                    else:
+                        ball.move_speed = 0.05
+                elif row == all_rows[3]:
+                    if ball.move_speed <= 0.04:
+                        ball.move_speed = ball.move_speed
+                    else:
+                        ball.move_speed = 0.04
+                elif row == all_rows[4]:
+                    if ball.move_speed <= 0.03:
+                        ball.move_speed = ball.move_speed
+                    else:
+                        ball.move_speed = 0.03
+                elif row == all_rows[5]:
+                    if ball.move_speed <= 0.02:
+                        ball.move_speed = ball.move_speed
+                    else:
+                        ball.move_speed = 0.02
+                elif row == all_rows[6]:
+                    if ball.move_speed <= 0.01:
+                        ball.move_speed = ball.move_speed
+                    else:
+                        ball.move_speed = 0.01
+                else:
+                    print('no')
 
 
 screen.mainloop()
