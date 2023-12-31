@@ -68,50 +68,68 @@ zero_R = 255
 neg_R = 255
 
 for i in range(13):
+    x_cor = -585 + i * 90
     block = Block()
     block.penup()
-    block.goto(-585 + i * 90, 300)
+    block.goto(x_cor, 300)
     block.draw_rectangle(back_R, 20, 147)
+    block.sety(300)
+    block.setx(x_cor)
     back_R = back_R - 10
     back_row.append(block)
 
 for i in range(13):
+    x_cor = -585 + i * 90
     block = Block()
     block.penup()
-    block.goto(-585 + i * 90, 250)
+    block.goto(x_cor, 250)
     block.draw_rectangle(four_R, 40, 147)
+    block.sety(250)
+    block.setx(x_cor)
     four_R = four_R - 10
     row_four.append(block)
 
 for i in range(13):
+    x_cor = -585 + i * 90
     block = Block()
     block.penup()
-    block.goto(-585 + i * 90, 200)
+    block.goto(x_cor, 200)
     block.draw_rectangle(three_R, 60, 147)
+    block.sety(200)
+    block.setx(x_cor)
     three_R = three_R - 10
     row_three.append(block)
 
 for i in range(13):
+    x_cor = -585 + i * 90
     block = Block()
     block.penup()
-    block.goto(-585 + i * 90, 150)
+    block.goto(x_cor, 150)
     block.draw_rectangle(two_R, 80, 147)
+    block.sety(150)
+    block.setx(x_cor)
     two_R = two_R - 10
     row_two.append(block)
 
 for i in range(13):
+    x_cor = -585 + i * 90
     block = Block()
     block.penup()
-    block.goto(-585 + i * 90, 100)
+    block.goto(x_cor, 100)
     block.draw_rectangle(one_R, 100, 147)
+    block.sety(100)
+    block.setx(x_cor)
     one_R = one_R - 10
     row_one.append(block)
 
 for i in range(13):
+    x_cor = -585 + i * 90
     block = Block()
     block.penup()
-    block.goto(-585 + i * 90, 50)
+    block.goto(x_cor, 50)
     block.draw_rectangle(zero_R, 120, 147)
+    block.sety(50)
+    block.setx(x_cor)
     zero_R = zero_R - 10
     row_zero.append(block)
 
@@ -119,7 +137,6 @@ for i in range(13):
     x_cor = -585 + i * 90
     block = Block()
     block.penup()
-    # block.goto(-585 + i * 90, 0)
     block.goto(x_cor, 0)
     block.draw_rectangle(neg_R, 140, 147)
     block.sety(0)
