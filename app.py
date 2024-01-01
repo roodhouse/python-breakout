@@ -6,7 +6,7 @@
 # add extra life upon clearing board
 # add board reset upon clearing of the board
 
-from turtle import Screen
+from turtle import Screen, hideturtle
 from menu import MenuItem
 from block import Block
 from paddle import Paddle
@@ -25,6 +25,8 @@ screen.listen()
 LIVES = 4
 SCORE = 0
 TITLE = "BREAKOUT"
+EMPTY = 0
+ROUND = 1
 
 left_menu = MenuItem()
 left_menu.goto(-575, 400)
@@ -37,6 +39,11 @@ right_menu.write(SCORE, font=("VT323", 35, "normal"))
 center_menu = MenuItem()
 center_menu.goto(-50, 400)
 center_menu.write(TITLE, font=("VT323", 35, "normal"))
+
+game_key = MenuItem()
+game_key.goto(-100,0)
+game_key.hideturtle()
+
 
 border = MenuItem()
 border.goto(-600, 390)
@@ -161,6 +168,20 @@ all_rows.append(row_three)
 all_rows.append(row_four)
 all_rows.append(back_row)
 
+def winner():
+    global ROUND, LIVES, game_on
+    game_on = False
+    print('board is clear')
+    ROUND += 1
+    LIVES += 1
+    game_key.showturtle()
+    ball.hideturtle()
+    paddle.hideturtle()
+    game_key.write(f'ROUND {ROUND}', font=("VT323", 135, "normal"))
+    left_menu.clear()
+    left_menu.write(f"x{LIVES}", font=("VT323", 35, "normal"))
+
+
 # condition for when the all_rows is completely empty
 
 while game_on:
@@ -215,10 +236,10 @@ while game_on:
                         right_menu.write(SCORE, font=("VT323", 35, "normal"))
 
                     if len(row) == 0:
-                        # crashes because of here...... 
-                        all_rows.pop(row)
+                        EMPTY += 1
                         print('row removed')
-                        print(all_rows)
+                        if EMPTY == 7:
+                            winner()
                         
                     elif row == all_rows[1]:
                         SCORE += 2
