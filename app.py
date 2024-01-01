@@ -2,11 +2,13 @@
 
 # pause button
 # game board
+# here !
+# testing what happens at round 2 start and end..
 # add reset of board to use when board is cleared or a new game is triggered
 # add extra life upon clearing board
 # add board reset upon clearing of the board
 
-from turtle import Screen, hideturtle
+from turtle import Screen
 from menu import MenuItem
 from block import Block
 from paddle import Paddle
@@ -74,175 +76,84 @@ one_R = 255
 zero_R = 255
 neg_R = 255
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 300)
-    block.draw_rectangle(back_R, 20, 147)
-    block.sety(300)
-    block.setx(x_cor)
-    back_R = back_R - 10
-    back_row.append(block)
+def create_board():
+    global back_row, back_R, row_four, four_R, row_three, three_R, row_two, two_R, row_one, one_R, row_zero, zero_R, row_neg, neg_R
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 300)
+        block.draw_rectangle(back_R, 20, 147)
+        block.sety(300)
+        block.setx(x_cor)
+        back_R = back_R - 10
+        back_row.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 250)
-    block.draw_rectangle(four_R, 40, 147)
-    block.sety(250)
-    block.setx(x_cor)
-    four_R = four_R - 10
-    row_four.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 250)
+        block.draw_rectangle(four_R, 40, 147)
+        block.sety(250)
+        block.setx(x_cor)
+        four_R = four_R - 10
+        row_four.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 200)
-    block.draw_rectangle(three_R, 60, 147)
-    block.sety(200)
-    block.setx(x_cor)
-    three_R = three_R - 10
-    row_three.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 200)
+        block.draw_rectangle(three_R, 60, 147)
+        block.sety(200)
+        block.setx(x_cor)
+        three_R = three_R - 10
+        row_three.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 150)
-    block.draw_rectangle(two_R, 80, 147)
-    block.sety(150)
-    block.setx(x_cor)
-    two_R = two_R - 10
-    row_two.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 150)
+        block.draw_rectangle(two_R, 80, 147)
+        block.sety(150)
+        block.setx(x_cor)
+        two_R = two_R - 10
+        row_two.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 100)
-    block.draw_rectangle(one_R, 100, 147)
-    block.sety(100)
-    block.setx(x_cor)
-    one_R = one_R - 10
-    row_one.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 100)
+        block.draw_rectangle(one_R, 100, 147)
+        block.sety(100)
+        block.setx(x_cor)
+        one_R = one_R - 10
+        row_one.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 50)
-    block.draw_rectangle(zero_R, 120, 147)
-    block.sety(50)
-    block.setx(x_cor)
-    zero_R = zero_R - 10
-    row_zero.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 50)
+        block.draw_rectangle(zero_R, 120, 147)
+        block.sety(50)
+        block.setx(x_cor)
+        zero_R = zero_R - 10
+        row_zero.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 0)
-    block.draw_rectangle(neg_R, 140, 147)
-    block.sety(0)
-    block.setx(x_cor)
-    neg_R = neg_R - 10
-    row_neg.append(block)
-
-# test in next branch
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 300)
-#     block.change_color(back_R, 20, 147)
-#     block.sety(300)
-#     block.setx(x_cor)
-#     back_R = back_R - 10
-#     back_row.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 250)
-#     block.change_color(four_R, 40, 147)
-#     block.sety(250)
-#     block.setx(x_cor)
-#     four_R = four_R - 10
-#     row_four.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 200)
-#     block.change_color(three_R, 60, 147)
-#     block.sety(200)
-#     block.setx(x_cor)
-#     three_R = three_R - 10
-#     row_three.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 150)
-#     block.change_color(two_R, 80, 147)
-#     block.sety(150)
-#     block.setx(x_cor)
-#     two_R = two_R - 10
-#     row_two.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 100)
-#     block.change_color(one_R, 100, 147)
-#     block.sety(100)
-#     block.setx(x_cor)
-#     one_R = one_R - 10
-#     row_one.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 50)
-#     block.change_color(zero_R, 120, 147)
-#     block.sety(50)
-#     block.setx(x_cor)
-#     zero_R = zero_R - 10
-#     row_zero.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 0)
-#     block.change_color(neg_R, 140, 147)
-#     block.sety(0)
-#     block.setx(x_cor)
-#     neg_R = neg_R - 10
-#     row_neg.append(block)
-
-# for item in back_row:
-#     item.hideturtle()
-# for item in row_four:
-#     item.hideturtle()
-# for item in row_three:
-#     item.hideturtle()
-# for item in row_two:
-#     item.hideturtle()
-# for item in row_one:
-#     item.hideturtle()
-# for item in row_zero:
-#     item.hideturtle()
-# for item in row_neg:
-#     item.hideturtle()
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 0)
+        block.draw_rectangle(neg_R, 140, 147)
+        block.sety(0)
+        block.setx(x_cor)
+        neg_R = neg_R - 10
+        row_neg.append(block)
 
 paddle = Paddle()
 paddle.hideturtle()
@@ -259,6 +170,9 @@ def start():
     print(game_on)
     game_on = True
     print(game_on)
+    create_board()
+    paddle.reset()
+    ball.reset()
     paddle.showturtle()
     ball.showturtle()
     play()
