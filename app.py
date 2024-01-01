@@ -161,8 +161,9 @@ all_rows.append(row_three)
 all_rows.append(row_four)
 all_rows.append(back_row)
 
+# condition for when the all_rows is completely empty
+
 while game_on:
-    print(LIVES)
     if LIVES < 0:
         left_menu.clear()
         left_menu.write("GAME OVER", font=("VT323", 35, "normal"))
@@ -206,12 +207,19 @@ while game_on:
                     ball.bounce_y()
                     block.clear()
                     row.pop(index)
-                    print(ball.move_speed)
+                    
                     if row == all_rows[0]:
                         ball.move_speed = ball.move_speed
                         SCORE += 1
                         right_menu.clear()
                         right_menu.write(SCORE, font=("VT323", 35, "normal"))
+
+                    if len(row) == 0:
+                        # crashes because of here...... 
+                        all_rows.pop(row)
+                        print('row removed')
+                        print(all_rows)
+                        
                     elif row == all_rows[1]:
                         SCORE += 2
                         right_menu.clear()
