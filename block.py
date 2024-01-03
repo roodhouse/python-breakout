@@ -17,14 +17,3 @@ class Block(Turtle):
             self.right(90)
         
         self.end_fill()
-
-# test in next branch
-# class Block(Turtle):
-#     def __init__(self):
-#         super().__init__()
-#         self.shape('square')
-#         # self.hideturtle()
-#         self.shapesize(2, 1)
-
-#     def change_color(self, R, G, B):
-#         self.color(R, G, B)

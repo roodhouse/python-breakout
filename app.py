@@ -1,17 +1,15 @@
-# game screen
+# game over
+    # hide board, ball and paddle
+    # print out the high scores
+    # if player score is higher than lowest highscore than offer input to put in name and save into highscores
 
-# pause button
-# game board
-# add reset of board to use when board is cleared or a new game is triggered
-# add extra life upon clearing board
-# add board reset upon clearing of the board
-
-from turtle import Screen, hideturtle
+from turtle import Screen
 from menu import MenuItem
 from block import Block
 from paddle import Paddle
 from ball import Ball
 import time
+import csv
 
 screen = Screen()
 
@@ -22,7 +20,16 @@ screen.title("Breakout")
 screen.tracer(0)
 screen.listen()
 
-LIVES = 4
+highscores = []
+print(highscores)
+with open('highscore.csv', 'r') as f:
+    reader = csv.reader(f)
+    for row in reader:
+        highscores.append(row)
+
+print(highscores)
+
+LIVES = 1
 SCORE = 0
 TITLE = "BREAKOUT"
 EMPTY = 0
@@ -40,10 +47,21 @@ center_menu = MenuItem()
 center_menu.goto(-50, 400)
 center_menu.write(TITLE, font=("VT323", 35, "normal"))
 
-game_key = MenuItem()
-game_key.goto(-100,0)
-game_key.hideturtle()
+highscores_table = MenuItem()
+highscores_table.goto(-75, -100)
 
+
+paddle = Paddle()
+paddle.hideturtle()
+ball = Ball()
+ball.hideturtle()
+
+screen.onkey(paddle.move_right, "Right")
+screen.onkey(paddle.move_left, "Left")
+
+game_key = MenuItem()
+game_key.goto(-150,0)
+game_key.write(f'ROUND {ROUND}', font=("VT323", 135, "normal"))
 
 border = MenuItem()
 border.goto(-600, 390)
@@ -57,6 +75,8 @@ border.right(90)
 border.forward(1190)
 border.right(90)
 border.forward(830)
+
+screen.update()
 
 back_row = []
 row_four = []
@@ -74,205 +94,165 @@ one_R = 255
 zero_R = 255
 neg_R = 255
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 300)
-    block.draw_rectangle(back_R, 20, 147)
-    block.sety(300)
-    block.setx(x_cor)
-    back_R = back_R - 10
-    back_row.append(block)
+all_rows = []
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 250)
-    block.draw_rectangle(four_R, 40, 147)
-    block.sety(250)
-    block.setx(x_cor)
-    four_R = four_R - 10
-    row_four.append(block)
+def create_board():
+    global back_row, back_R, row_four, four_R, row_three, three_R, row_two, two_R, row_one, one_R, row_zero, zero_R, row_neg, neg_R
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 300)
+        block.draw_rectangle(back_R, 20, 147)
+        block.sety(300)
+        block.setx(x_cor)
+        back_R = back_R - 10
+        back_row.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 200)
-    block.draw_rectangle(three_R, 60, 147)
-    block.sety(200)
-    block.setx(x_cor)
-    three_R = three_R - 10
-    row_three.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 250)
+        block.draw_rectangle(four_R, 40, 147)
+        block.sety(250)
+        block.setx(x_cor)
+        four_R = four_R - 10
+        row_four.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 150)
-    block.draw_rectangle(two_R, 80, 147)
-    block.sety(150)
-    block.setx(x_cor)
-    two_R = two_R - 10
-    row_two.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 200)
+        block.draw_rectangle(three_R, 60, 147)
+        block.sety(200)
+        block.setx(x_cor)
+        three_R = three_R - 10
+        row_three.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 100)
-    block.draw_rectangle(one_R, 100, 147)
-    block.sety(100)
-    block.setx(x_cor)
-    one_R = one_R - 10
-    row_one.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 150)
+        block.draw_rectangle(two_R, 80, 147)
+        block.sety(150)
+        block.setx(x_cor)
+        two_R = two_R - 10
+        row_two.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 50)
-    block.draw_rectangle(zero_R, 120, 147)
-    block.sety(50)
-    block.setx(x_cor)
-    zero_R = zero_R - 10
-    row_zero.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 100)
+        block.draw_rectangle(one_R, 100, 147)
+        block.sety(100)
+        block.setx(x_cor)
+        one_R = one_R - 10
+        row_one.append(block)
 
-for i in range(13):
-    x_cor = -585 + i * 90
-    block = Block()
-    block.penup()
-    block.goto(x_cor, 0)
-    block.draw_rectangle(neg_R, 140, 147)
-    block.sety(0)
-    block.setx(x_cor)
-    neg_R = neg_R - 10
-    row_neg.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 50)
+        block.draw_rectangle(zero_R, 120, 147)
+        block.sety(50)
+        block.setx(x_cor)
+        zero_R = zero_R - 10
+        row_zero.append(block)
 
-# test in next branch
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 300)
-#     block.change_color(back_R, 20, 147)
-#     block.sety(300)
-#     block.setx(x_cor)
-#     back_R = back_R - 10
-#     back_row.append(block)
+    for i in range(13):
+        x_cor = -585 + i * 90
+        block = Block()
+        block.penup()
+        block.goto(x_cor, 0)
+        block.draw_rectangle(neg_R, 140, 147)
+        block.sety(0)
+        block.setx(x_cor)
+        neg_R = neg_R - 10
+        row_neg.append(block)
 
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 250)
-#     block.change_color(four_R, 40, 147)
-#     block.sety(250)
-#     block.setx(x_cor)
-#     four_R = four_R - 10
-#     row_four.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 200)
-#     block.change_color(three_R, 60, 147)
-#     block.sety(200)
-#     block.setx(x_cor)
-#     three_R = three_R - 10
-#     row_three.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 150)
-#     block.change_color(two_R, 80, 147)
-#     block.sety(150)
-#     block.setx(x_cor)
-#     two_R = two_R - 10
-#     row_two.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 100)
-#     block.change_color(one_R, 100, 147)
-#     block.sety(100)
-#     block.setx(x_cor)
-#     one_R = one_R - 10
-#     row_one.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 50)
-#     block.change_color(zero_R, 120, 147)
-#     block.sety(50)
-#     block.setx(x_cor)
-#     zero_R = zero_R - 10
-#     row_zero.append(block)
-
-# for i in range(13):
-#     x_cor = -585 + i * 90
-#     block = Block()
-#     # block.penup()
-#     block.goto(x_cor, 0)
-#     block.change_color(neg_R, 140, 147)
-#     block.sety(0)
-#     block.setx(x_cor)
-#     neg_R = neg_R - 10
-#     row_neg.append(block)
-
-# for item in back_row:
-#     item.hideturtle()
-# for item in row_four:
-#     item.hideturtle()
-# for item in row_three:
-#     item.hideturtle()
-# for item in row_two:
-#     item.hideturtle()
-# for item in row_one:
-#     item.hideturtle()
-# for item in row_zero:
-#     item.hideturtle()
-# for item in row_neg:
-#     item.hideturtle()
-
-paddle = Paddle()
-paddle.hideturtle()
-ball = Ball()
-ball.hideturtle()
-
-screen.onkey(paddle.move_right, "Right")
-screen.onkey(paddle.move_left, "Left")
-
+    all_rows.append(row_neg)
+    all_rows.append(row_zero)
+    all_rows.append(row_one)
+    all_rows.append(row_two)
+    all_rows.append(row_three)
+    all_rows.append(row_four)
+    all_rows.append(back_row)
+ 
 game_on = False
 
-def start():
-    global game_on, paddle, ball
-    print(game_on)
-    game_on = True
-    print(game_on)
-    paddle.showturtle()
+paused_x = None
+paused_y = None
+pause_direction = None
+
+def unpause():
+    global paused_x, paused_y, paused_dx, paused_dy, pause_direction
+    ball.x_move = paused_x
+    ball.y_move = paused_y
+    ball.setheading(pause_direction)
+
     ball.showturtle()
-    play()
+    paddle.showturtle()
+
+    for row in all_rows:
+        for item in row:
+            full_color = item.color()[0]    
+            item.draw_rectangle(int(full_color[0]), int(full_color[1]), int(full_color[2]))
+
+    print('unpaused')
+    game_key.clear()
+    game_key.hideturtle()
+
+    screen.onkey(start, 'space')
+    screen.onkey(paddle.move_right, "Right")
+    screen.onkey(paddle.move_left, "Left")
+
+def start():
+    global game_on, paddle, ball, all_rows, back_R, four_R, three_R, two_R, one_R, zero_R, neg_R, EMPTY, paused_x, paused_y, pause_direction
+    if not game_on:
+        game_on = True
+        print(game_on)
+        all_rows.clear()
+        back_R = 255
+        four_R = 255
+        three_R = 255
+        two_R = 255
+        one_R = 255
+        zero_R = 255
+        neg_R = 255
+        create_board()
+        paddle.reset()
+        ball.reset()
+        paddle.showturtle()
+        ball.showturtle()
+        game_key.clear()
+        game_key.hideturtle()
+        EMPTY = 0
+        play()
+    else:
+        print('game is paused')
+        paused_x = ball.x_move
+        paused_y = ball.y_move
+        pause_direction = ball.heading()
+        ball.x_move = 0
+        ball.y_move = 0
+        ball.hideturtle()
+        paddle.hideturtle()
+
+        for row in all_rows:
+            for item in row:
+                item.clear()
+
+        game_key.write('PAUSED', font=("VT323", 135, "normal"))
+        screen.onkey(None, key='Right')
+        screen.onkey(None, key='Left')
+        screen.onkey(unpause, 'space')
 
 screen.onkey(start, 'space')
-
-all_rows = []
-all_rows.append(row_neg)
-all_rows.append(row_zero)
-all_rows.append(row_one)
-all_rows.append(row_two)
-all_rows.append(row_three)
-all_rows.append(row_four)
-all_rows.append(back_row)
 
 def winner():
     global ROUND, LIVES, game_on
@@ -280,12 +260,12 @@ def winner():
     print('board is clear')
     ROUND += 1
     LIVES += 1
-    game_key.showturtle()
     ball.hideturtle()
     paddle.hideturtle()
     game_key.write(f'ROUND {ROUND}', font=("VT323", 135, "normal"))
     left_menu.clear()
     left_menu.write(f"x{LIVES}", font=("VT323", 35, "normal"))
+    screen.update()
 
 # condition for when the all_rows is completely empty
 
@@ -295,6 +275,8 @@ def play():
         if LIVES < 0:
             left_menu.clear()
             left_menu.write("GAME OVER", font=("VT323", 35, "normal"))
+            game_key.write('GAME OVER', font=("VT323", 135, "normal"))
+            highscores_table.write('High Scores', font=("VT323", 40, "underline"))
             game_on = False
 
         else:
