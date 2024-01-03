@@ -4,6 +4,7 @@
     # if player score is higher than lowest highscore than offer input to put in name and save into highscores
 
 from turtle import Screen
+import turtle
 from menu import MenuItem
 from block import Block
 from paddle import Paddle
@@ -20,12 +21,23 @@ screen.title("Breakout")
 screen.tracer(0)
 screen.listen()
 
+prompt = turtle.Turtle()
+
 highscores = []
 print(highscores)
 with open('highscore.csv', 'r') as f:
     reader = csv.reader(f)
     for row in reader:
         highscores.append(row)
+
+print(highscores)
+print(type(highscores[0][1]))
+
+for high in highscores:
+    high[1] = int(high[1])
+
+print(type(highscores[0][1]))
+highscores = sorted(highscores, key=lambda x: x[1], reverse=True)
 
 print(highscores)
 
@@ -48,8 +60,7 @@ center_menu.goto(-50, 400)
 center_menu.write(TITLE, font=("VT323", 35, "normal"))
 
 highscores_table = MenuItem()
-highscores_table.goto(-75, -100)
-
+highscores_table.goto(-50, -100)
 
 paddle = Paddle()
 paddle.hideturtle()
@@ -273,11 +284,71 @@ def play():
     global game_on, LIVES, SCORE, EMPTY
     while game_on:
         if LIVES < 0:
+            print(f'the score is {SCORE}')
             left_menu.clear()
             left_menu.write("GAME OVER", font=("VT323", 35, "normal"))
+            game_key.goto(-220,0)
             game_key.write('GAME OVER', font=("VT323", 135, "normal"))
+
+            if SCORE > highscores[4][1]:
+                print('this guy was better')
+                # screen.textinput('Enter your name', 'What is your name?')
+                
+
+# here: trying to add prompt within screen...
+
+                def new_score(key):
+                    if key == 'Return':
+                        user = prompt
+                        print(user)
+                    else:
+                        prompt.write(key, align='left', font=("VT323", 35, "normal"))
+                
+                # screen.onkey(new_score, "Return")
+                new_score()
+
+
             highscores_table.write('High Scores', font=("VT323", 40, "underline"))
+
+            highscores_table.goto(highscores_table.xcor(), highscores_table.ycor() - 40)
+            highscores_table.write('Name', font=("VT323", 35, "normal"))
+            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+            highscores_table.write('Score', font=("VT323", 35, "normal"))
+
+            highscores_table.goto(-50, highscores_table.ycor() - 40)
+            highscores_table.write(f'{highscores[0][0]}', font=("VT323", 35, "normal"))
+            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+            highscores_table.write(f'{highscores[0][1]}', font=("VT323", 35, "normal"))
+
+            highscores_table.goto(-50, highscores_table.ycor() - 40)
+            highscores_table.write(f'{highscores[1][0]}', font=("VT323", 35, "normal"))
+            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+            highscores_table.write(f'{highscores[1][1]}', font=("VT323", 35, "normal"))
+
+            highscores_table.goto(-50, highscores_table.ycor() - 40)
+            highscores_table.write(f'{highscores[2][0]}', font=("VT323", 35, "normal"))
+            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+            highscores_table.write(f'{highscores[2][1]}', font=("VT323", 35, "normal"))
+
+            highscores_table.goto(-50, highscores_table.ycor() - 40)
+            highscores_table.write(f'{highscores[3][0]}', font=("VT323", 35, "normal"))
+            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+            highscores_table.write(f'{highscores[3][1]}', font=("VT323", 35, "normal"))
+
+            highscores_table.goto(-50, highscores_table.ycor() - 40)
+            highscores_table.write(f'{highscores[4][0]}', font=("VT323", 35, "normal"))
+            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+            highscores_table.write(f'{highscores[4][1]}', font=("VT323", 35, "normal"))
+
             game_on = False
+            ball.hideturtle()
+            paddle.hideturtle()
+
+            for row in all_rows:
+                for item in row:
+                    item.clear()
+
+            screen.update()
 
         else:
             time.sleep(ball.move_speed)
