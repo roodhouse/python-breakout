@@ -1,6 +1,3 @@
-# game over
-    # on space go back to round 1
-
 from turtle import Screen
 from menu import MenuItem
 from block import Block
@@ -32,10 +29,27 @@ for high in highscores:
 
 highscores = sorted(highscores, key=lambda x: x[1], reverse=True)
 
+
+LIVES = 4
+SCORE = 0
+TITLE = "BREAKOUT"
+EMPTY = 0
+ROUND = 1
+USER = ''
+game_on = False
+GAME = 1
+max_chars = 3
+chars_entered = 0
+
 def new_guy():
+    global chars_entered
+    chars_entered = 0
     new_entry = [USER, SCORE]
+    print(f'high scores in new guy before pop: {highscores}')
     highscores.pop()
+    print(f'high scores in new guy after pop: {highscores}')
     highscores.append(new_entry)
+    print(f'high scores in new guy after append: {highscores}')
     
     with open('highscore.csv', 'w', newline='') as f:
         writer = csv.writer(f)
@@ -43,13 +57,8 @@ def new_guy():
     
     update_highscores()
 
-LIVES = 0
-SCORE = 0
-TITLE = "BREAKOUT"
-EMPTY = 0
-ROUND = 1
-USER = ''
-game_on = False
+    screen.onkeypress(None)
+    screen.onkey(new_start, 'space')
 
 left_menu = MenuItem()
 left_menu.goto(-575, 400)
@@ -72,6 +81,8 @@ def update_highscores():
 
     highscores_table.clear()
     highscores_table.goto(-75, 100)
+
+    print(highscores)
 
     highscores_table.write('High Scores', font=("VT323", 40, "underline"))
 
@@ -109,7 +120,6 @@ prompt.goto(-110, -200)
 
 initials = MenuItem()
 initials.goto(-20, -360)
-
 
 paddle = Paddle()
 paddle.hideturtle()
@@ -158,6 +168,8 @@ all_rows = []
 
 def create_board():
     global back_row, back_R, row_four, four_R, row_three, three_R, row_two, two_R, row_one, one_R, row_zero, zero_R, row_neg, neg_R
+    print('back row from create board')
+    print(back_row)
     for i in range(13):
         x_cor = -585 + i * 90
         block = Block()
@@ -271,9 +283,9 @@ def unpause():
 
 def start():
     global game_on, paddle, ball, all_rows, back_R, four_R, three_R, two_R, one_R, zero_R, neg_R, EMPTY, paused_x, paused_y, pause_direction
+    
     if not game_on:
         game_on = True
-        print(game_on)
         all_rows.clear()
         back_R = 255
         four_R = 255
@@ -325,29 +337,48 @@ def winner():
     left_menu.write(f"x{LIVES}", font=("VT323", 35, "normal"))
     screen.update()
 
-# condition for when the all_rows is completely empty
-max_chars = 3
-chars_entered = 0
+def kill_space():
+    print('killed space')
 
-print(chars_entered)
+def new_start():
+    global ROUND, game_on, game_key, LIVES, SCORE, back_row, row_four, row_three, row_two, row_one, row_zero, row_neg, GAME, USER
+    ROUND = 1
+    LIVES = 4
+    SCORE = 0
+    GAME += 1
+    USER = ''
+    print('new start')
+    game_key.clear()
+    highscores_table.clear()
+    prompt.clear()
+    initials.clear()
+    game_key.goto(-150,0)
+    game_key.write(f'ROUND {ROUND}', font=("VT323", 135, "normal"))
+    left_menu.clear()
+    right_menu.clear()
+    left_menu.write(f"x{LIVES}", font=("VT323", 35, "normal"))
+    right_menu.write(f"{SCORE}", font=("VT323", 35, "normal"))
+    back_row = []
+    row_four = []
+    row_three = []
+    row_two = []
+    row_one = []
+    row_zero = []
+    row_neg = []
+    game_on = False
+    screen.onkey(start, 'space')
 
 def play():
-    global game_on, LIVES, SCORE, EMPTY, USER, max_chars, chars_entered
+    global game_on, LIVES, SCORE, EMPTY, USER, max_chars, chars_entered, GAME
     while game_on:
         if LIVES < 0:
+            screen.onkey(kill_space, 'space')
             left_menu.clear()
             left_menu.write("GAME OVER", font=("VT323", 35, "normal"))
             game_key.goto(-220,200)
             game_key.write('GAME OVER', font=("VT323", 135, "normal"))
 
-            if SCORE > highscores[4][1]:    
-                prompt.write('It is wonderful!', font=("VT323", 35, 'normal'))
-                prompt.goto(-265, -240)
-                prompt.write('You have achieved a top 5 high score.', font=("VT323", 35, 'normal'))
-                prompt.goto(-265, -280)
-                prompt.write('Enter your initials and press return.', font=("VT323", 35, 'normal'))
-
-                def _onkeypress(self, fun, key=None):
+            def _onkeypress(self, fun, key=None):
                     if fun is None:
                         if key is None:
                             self.cv.unbind("<KeyPress>", None)
@@ -362,11 +393,11 @@ def play():
                             fun()
                         self.cv.bind("<KeyPress-%s>" % key, eventfun)
 
-                def letter(character):
+            def letter(character):
                     global USER, max_chars, chars_entered
-                    
+                    print(f'chars_entereda: {chars_entered}')
                     chars_entered += 1
-
+                    print(f'chars_entereda: {chars_entered}')
                     if chars_entered <= max_chars:
                         initials.write(character, move=True, font=("VT323", 35, 'normal'))
                         USER = USER + character
@@ -374,35 +405,81 @@ def play():
                     else:
                         print('no more')
 
+            if SCORE > highscores[4][1]:
+                if GAME > 1:
+                    prompt.goto(-110, -200) 
+                    prompt.write('It is wonderful!', font=("VT323", 35, 'normal'))
+                    prompt.goto(-265, -240)
+                    prompt.write('You have achieved a top 5 high score.', font=("VT323", 35, 'normal'))
+                    prompt.goto(-265, -280)
+                    prompt.write('Enter your initials and press return.', font=("VT323", 35, 'normal'))
+                    
+                else:
+                    prompt.write('It is wonderful!', font=("VT323", 35, 'normal'))
+                    prompt.goto(-265, -240)
+                    prompt.write('You have achieved a top 5 high score.', font=("VT323", 35, 'normal'))
+                    prompt.goto(-265, -280)
+                    prompt.write('Enter your initials and press return.', font=("VT323", 35, 'normal'))
+
                 screen._onkeypress = partial(_onkeypress, screen)
                 screen.onkeypress(letter)
-                 
-            highscores_table.write('High Scores', font=("VT323", 40, "underline"))
+            
+            if GAME > 1:
+                highscores_table.clear()
+                highscores_table.goto(-75, 100)
+                highscores_table.write('High Scores', font=("VT323", 40, "underline"))
 
-            highscores_table.goto(-60, highscores_table.ycor() - 40)
-            highscores_table.write(f'{highscores[0][0]}', font=("VT323", 35, "normal"))
-            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
-            highscores_table.write(f'{highscores[0][1]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[0][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[0][1]}', font=("VT323", 35, "normal"))
 
-            highscores_table.goto(-60, highscores_table.ycor() - 40)
-            highscores_table.write(f'{highscores[1][0]}', font=("VT323", 35, "normal"))
-            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
-            highscores_table.write(f'{highscores[1][1]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[1][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[1][1]}', font=("VT323", 35, "normal"))
 
-            highscores_table.goto(-60, highscores_table.ycor() - 40)
-            highscores_table.write(f'{highscores[2][0]}', font=("VT323", 35, "normal"))
-            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
-            highscores_table.write(f'{highscores[2][1]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[2][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[2][1]}', font=("VT323", 35, "normal"))
 
-            highscores_table.goto(-60, highscores_table.ycor() - 40)
-            highscores_table.write(f'{highscores[3][0]}', font=("VT323", 35, "normal"))
-            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
-            highscores_table.write(f'{highscores[3][1]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[3][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[3][1]}', font=("VT323", 35, "normal"))
 
-            highscores_table.goto(-60, highscores_table.ycor() - 40)
-            highscores_table.write(f'{highscores[4][0]}', font=("VT323", 35, "normal"))
-            highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
-            highscores_table.write(f'{highscores[4][1]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[4][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[4][1]}', font=("VT323", 35, "normal"))
+            else:
+                highscores_table.write('High Scores', font=("VT323", 40, "underline"))
+
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[0][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[0][1]}', font=("VT323", 35, "normal"))
+
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[1][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[1][1]}', font=("VT323", 35, "normal"))
+
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[2][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[2][1]}', font=("VT323", 35, "normal"))
+
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[3][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[3][1]}', font=("VT323", 35, "normal"))
+
+                highscores_table.goto(-60, highscores_table.ycor() - 40)
+                highscores_table.write(f'{highscores[4][0]}', font=("VT323", 35, "normal"))
+                highscores_table.goto(highscores_table.xcor() + 100, highscores_table.ycor())
+                highscores_table.write(f'{highscores[4][1]}', font=("VT323", 35, "normal"))
 
             game_on = False
             ball.hideturtle()
