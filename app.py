@@ -424,6 +424,9 @@ def play():
                 screen._onkeypress = partial(_onkeypress, screen)
                 screen.onkeypress(letter)
             
+            else:
+                screen.onkey(new_start, 'space')
+            
             if GAME > 1:
                 highscores_table.clear()
                 highscores_table.goto(-75, 100)
