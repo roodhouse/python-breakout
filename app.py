@@ -45,11 +45,8 @@ def new_guy():
     global chars_entered
     chars_entered = 0
     new_entry = [USER, SCORE]
-    print(f'high scores in new guy before pop: {highscores}')
     highscores.pop()
-    print(f'high scores in new guy after pop: {highscores}')
     highscores.append(new_entry)
-    print(f'high scores in new guy after append: {highscores}')
     
     with open('highscore.csv', 'w', newline='') as f:
         writer = csv.writer(f)
@@ -59,6 +56,7 @@ def new_guy():
 
     screen.onkeypress(None)
     screen.onkey(new_start, 'space')
+    screen.onkey(None, 'Return')
 
 left_menu = MenuItem()
 left_menu.goto(-575, 400)
